@@ -141,13 +141,12 @@ data_bg_final <- data.frame(data_bg_final, as.data.frame(gh_decode(data_bg_final
 #Step 1. Decide on the final list of geo-units that are subject to predictive analysis----
 #clustering stations in Sofia by their latitude and longitude into 15 groups
 set.seed(20) # allows to create a starting point for randomly generated numbers,
-clusters=kmeans(Sofia_Topo[,1:2], 15)
-Sofia_Topo$Cluster <- as.factor(clusters$cluster)
+clusters<-kmeans(Stations_decoded[,6:7], 196)
 str(clusters)
-centroids=clusters$centers #centroids
-#class(centroids)
+centroids<-clusters$centers
+View(centroids)
 
-#finding the closest point to the cluster’s centroid
+#finding the closest point to the clusterвЂ™s centroid
 install.packages("rgeos")
 library(rgeos)
 library(sp)
@@ -157,32 +156,32 @@ library(nlme)
 install.packages("gdistance")
 library(gdistance)
 
-sp1= SpatialPoints(centroids[,c("lat","lng")])
-sp2= SpatialPoints(Sofia_Topo[,c("lng","lat")])
-points_matrix=distGeo(sp1,sp2)
-Sofia_Topo1=groupedData
-Sofia_Topo1$nearest_topo <- apply(gDistance(sp2, sp1, byid=TRUE), 1, which.min)
-Sofia_Topo1$Elevation <- Sofia_Topo[Sofia_Topo1$nearest_topo,"elev"]
+sp1<-SpatialPoints(centroids[,c("lat","lng")])
+sp2<-SpatialPoints(Sofia_Topo[,c("lng","lat")])
+
+install.packages("fields")
+library(fields)
+rdist<-data.frame(rdist(centroids, Sofia_Topo))
+mindist<-data.frame(apply(rdist,1, FUN=min))
+colnames(mindist) <- 'mindistance'
+
+View(distance)
+install.packages("raster")
+library(raster)
 
 
 
-
-
-
-
-
-
-############ неуспешни опити, но не ги трия за случай, ако ще подпомогнат на някого да му хрумне
+############ Г­ГҐГіГ±ГЇГҐГёГ­ГЁ Г®ГЇГЁГІГЁ, Г­Г® Г­ГҐ ГЈГЁ ГІГ°ГЁГї Г§Г  Г±Г«ГіГ·Г Г©, Г ГЄГ® Г№ГҐ ГЇГ®Г¤ГЇГ®Г¬Г®ГЈГ­Г ГІ Г­Г  Г­ГїГЄГ®ГЈГ® Г¤Г  Г¬Гі ГµГ°ГіГ¬Г­ГҐ
 >cbind(salaries, experience)
 
-# Версия на Владимир:
+# Г‚ГҐГ°Г±ГЁГї Г­Г  Г‚Г«Г Г¤ГЁГ¬ГЁГ°:
 set1sp <- Spati9alPoints(centroids[,c("lat","lng")])
 set2sp <- SpatialPoints(Sofia_Topo[,c("Lon","Lat")])
 zz <- distGeo(setsp1,setsp2)
 GroupedData1 <- GroupedData
 GroupedData1$nearest_topo <- apply(gDistance(sp2, sp1, byid=TRUE), 1, which.min)
 GroupedData1$Elevation <- SofiaTopography[GroupedData1$nearest_topo,"Elev"]
-# край на неговата версия
+# ГЄГ°Г Г© Г­Г  Г­ГҐГЈГ®ГўГ ГІГ  ГўГҐГ°Г±ГЁГї
 
 lapply(Sofia_Topo,function(Sofia_Topo,centroids) {(sqrt((Sofia_Topo[1] - centroids[1])^2+(Sofia_Topo[2]-centroids[2])^2))},centroids)
 #$`lat`
