@@ -1,7 +1,6 @@
 ## Week 1-------
 #Step 1: Importing data ----
-#setwd("D:\\Preslava\\uni\\Business Analytics\\Tuesday class\\Monthly Challenge Oct\\Air Tube")
-setwd("C:\\Users\\Daria\\Desktop\\business analytics\\tuesday\\data for the air case\\Air Tube")
+setwd("D:\\Preslava\\uni\\Business Analytics\\Tuesday class\\Monthly Challenge Oct\\Air Tube")
 
 air18=read.csv("data_bg_2018.csv", na.string=c("","NA"," "), stringsAsFactors = F)
 air17=read.csv("data_bg_2017.csv", na.string=c("","NA"," "), stringsAsFactors = F)
